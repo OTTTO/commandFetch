@@ -5,8 +5,13 @@ const lines = commandsFile.split('\n');
 
 var commands = [];
 
-for(let j=2; j<lines.length; j+=3) {
-    commands.push({ 'description':lines[j], 'command':lines[j+1] });
+for(let j = 0; j < lines.length; j++) {
+	if (lines[j].startsWith('# commandlinefu.com') || lines[j] === '') {		
+		continue;
+	} else {
+		commands.push({ 'description':lines[j], 'command':lines[j+1] });
+		j++;
+	}
 }
 
 var json = JSON.stringify(commands, null, 2);
