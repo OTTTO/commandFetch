@@ -1,6 +1,5 @@
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
-const json = require("./commands.json");
 
 const url = 'mongodb://localhost:27017';
 
@@ -12,9 +11,15 @@ MongoClient.connect(url, { useNewUrlParser: true }, function(err, client) {
 
     const db = client.db(dbName);
 
-	db.collection('commands').insertMany(json, function(err, r) {
-		client.close();
-	});
+    var commands = db.collection('commands');
+   
+    commands.aggregate([{ $sample: { size: 1 } }])
+        .forEach((doc) => {
+            console.log("description: ", doc.description);
+            console.log("command: ", doc.command);
+        });
+    
+    client.close();
 });
 
 
